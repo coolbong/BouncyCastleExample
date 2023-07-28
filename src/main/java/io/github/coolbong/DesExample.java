@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class DesExample {
 
 
-    public void desEcbEx01() throws InvalidCipherTextException {
+    public byte[] desEcbEx01() throws InvalidCipherTextException {
         // TDES 2 key
         byte[] key = {
                 (byte)0x40, (byte)0x41, (byte)0x42, (byte)0x43, (byte)0x44, (byte)0x45, (byte)0x46, (byte)0x47,
@@ -30,10 +30,10 @@ public class DesExample {
         int ret = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, ret);
 
-        print(outBuff);
+        return outBuff;
     }
 
-    public void print(byte[] arr) {
+    public static void print(byte[] arr) {
         StringBuilder sb = new StringBuilder();
         for (byte b : arr) {
             sb.append(String.format("%02X:", b));
@@ -46,7 +46,10 @@ public class DesExample {
 
     public static void main(String[] args) throws Exception {
         DesExample ex = new DesExample();
-        ex.desEcbEx01();
+        byte[] ret;
+
+        ret = ex.desEcbEx01();
+        print(ret);
     }
 
 
