@@ -86,7 +86,8 @@ public class DesExample {
 
 
         BlockCipher engine = new DESedeEngine();
-        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(engine, new ISO7816d4Padding());
+        BufferedBlockCipher cipher = new BufferedBlockCipher(engine);
+        //BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(engine, new ISO7816d4Padding());
         cipher.init(true, new KeyParameter(key));
 
         byte[] outBuff = new byte[text.length];
