@@ -12,8 +12,10 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static io.github.coolbong.Util.toHex;
+import static junit.framework.TestCase.assertEquals;
 
 public class Des {
 
@@ -47,13 +49,52 @@ public class Des {
         return outBuff;
     }
 
+    public byte[] desEcbPaddEncrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+        // create TDES cipher
+        BlockCipher engine = new DESedeEngine();
+        // Padding cipher (adjust input data length to des block size)
+        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(engine);
+        // set key
+        cipher.init(true, new KeyParameter(key));
+
+        // get output buffer size
+        int outputSize = cipher.getOutputSize(text.length);
+        // create output buffer
+        byte[] outBuff = new byte[outputSize];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        cipher.doFinal(outBuff, offset);
+
+        return outBuff;
+    }
+
+    public byte[] desEcbPaddDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+        // create TDES cipher
+        BlockCipher engine = new DESedeEngine();
+        // Padding cipher (adjust input data length to des block size)
+        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(engine);
+        // set key
+        cipher.init(false, new KeyParameter(key));
+
+        // get output buffer size
+        int outputSize = cipher.getOutputSize(text.length);
+        // create output buffer
+        byte[] outBuff = new byte[outputSize];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        int ret = cipher.doFinal(outBuff, offset);
+
+        return Arrays.copyOf(outBuff, offset+ret);
+    }
+
+
     public byte[] desCbcEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
-        // TDES 2 key
+        // create default initialize vector
         if (iv == null) {
             iv = new byte[8];
         }
+        // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         BufferedBlockCipher cipher = new BufferedBlockCipher(new CBCBlockCipher(engine));
+        // set key with iv
         cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
 
         byte[] outBuff = new byte[text.length];
@@ -64,12 +105,14 @@ public class Des {
     }
 
     public byte[] desCbcDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
-        // TDES 2 key
+        // create default initialize vector
         if (iv == null) {
             iv = new byte[8];
         }
+        // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         BufferedBlockCipher cipher = new BufferedBlockCipher(new CBCBlockCipher(engine));
+        // set key with iv
         cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
 
         byte[] outBuff = new byte[text.length];
@@ -79,29 +122,48 @@ public class Des {
         return outBuff;
     }
 
-    public void desEcbExample() throws InvalidCipherTextException {
-
-        // user password encryption example
-        String password = "LoremIpsum";
-        byte[] input = password.getBytes(StandardCharsets.UTF_8);
-        // 16 bytes des key
-        byte[] key = "passwordwordpass".getBytes(StandardCharsets.UTF_8);
-
-        // TDES engine
+    public byte[] desCbcPaddEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[8];
+        }
+        // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         // Padding cipher (adjust input data length to des block size)
-        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(engine);
+        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
         // set key
-        cipher.init(true, new KeyParameter(key));
+        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
 
         // get output buffer size
-        int outputSize = cipher.getOutputSize(input.length);
+        int outputSize = cipher.getOutputSize(text.length);
         // create output buffer
         byte[] outBuff = new byte[outputSize];
-        int offset = cipher.processBytes(input, 0, input.length, outBuff, 0);
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
-        System.out.println(toHex(outBuff));
+        return outBuff;
+    }
+
+    public byte[] desCbcPaddDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[8];
+        }
+        // create TDES cipher
+        BlockCipher engine = new DESedeEngine();
+        // Padding cipher (adjust input data length to des block size)
+        BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(engine));
+        // set key
+        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
+
+        // get output buffer size
+        int outputSize = cipher.getOutputSize(text.length);
+        // create output buffer
+        byte[] outBuff = new byte[outputSize];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        int ret = cipher.doFinal(outBuff, offset);
+
+        return Arrays.copyOf(outBuff, offset+ret);
     }
 
     public static void print(byte[] arr) {
@@ -114,9 +176,6 @@ public class Des {
     }
 
 
-
-
-
     public static void main(String[] args) throws Exception {
 
         // TDES 2 key
@@ -125,17 +184,42 @@ public class Des {
                 (byte)0x48, (byte)0x49, (byte)0x4a, (byte)0x4b, (byte)0x4c, (byte)0x4d, (byte)0x4e, (byte)0x4f
         };
 
+        // des ecb example
         Des ex = new Des();
         byte[] ret;
+        byte[] text;
 
-        byte[] text = "intellij".getBytes(StandardCharsets.UTF_8);
-        ret = ex.desEcbEncrypt(key, text);
+//        text = "intellij".getBytes(StandardCharsets.UTF_8);
+//        ret = ex.desEcbEncrypt(key, text);
+//        print(ret);
+//
+//        ret = ex.desEcbDecrypt(key, ret);
+//        System.out.println(new String(ret, StandardCharsets.UTF_8));
+//
+//        // des cbc example
+//        text = "jetbrainintellij".getBytes(StandardCharsets.UTF_8);
+//        ret = ex.desCbcEncrypt(key, text, null);
+//        print(ret);
+//
+//        ret = ex.desCbcDecrypt(key, ret, null);
+//        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+
+        text = "hello world".getBytes(StandardCharsets.UTF_8);
+        ret = ex.desEcbPaddEncrypt(key, text);
         print(ret);
 
-        ret = ex.desEcbDecrypt(key, ret);
+        ret = ex.desEcbPaddDecrypt(key, ret);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
-        //ex.desEcbExample();
+
+        text = "hello world".getBytes(StandardCharsets.UTF_8);
+        ret = ex.desCbcPaddEncrypt(key, text, null);
+        System.out.println(toHex(ret));
+        print(ret);
+
+        ret = ex.desCbcPaddDecrypt(key, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
 
     }
 
