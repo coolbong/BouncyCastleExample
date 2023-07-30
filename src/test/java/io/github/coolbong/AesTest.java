@@ -35,7 +35,7 @@ public class AesTest {
                 (byte)0xab, (byte)0x28, (byte)0xe8, (byte)0xbc
 
         };
-        byte[] ret = aes.aesEcbDectypt(aes_128bit_16byte, text);
+        byte[] ret = aes.aesEcbDecrypt(aes_128bit_16byte, text);
         assertEquals("jetbrainintellij", new String(ret, StandardCharsets.UTF_8));
     }
 }

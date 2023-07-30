@@ -4,7 +4,10 @@ import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;
+import org.bouncycastle.crypto.modes.CBCBlockCipher;
+import org.bouncycastle.crypto.modes.SICBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
 
 import java.nio.charset.StandardCharsets;
 
@@ -31,7 +34,7 @@ public class Aes {
         return outBuff;
     }
 
-    public byte[] aesEcbDectypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+    public byte[] aesEcbDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
         // create AES cipher
         BlockCipher engine = new AESEngine();
         BufferedBlockCipher cipher = new BufferedBlockCipher(engine);
@@ -46,33 +49,146 @@ public class Aes {
     }
 
 
+    public byte[] aesCbcEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[16];
+        }
+        // create AES cipher
+        BlockCipher engine = new AESEngine();
+        BufferedBlockCipher cipher = new BufferedBlockCipher(new CBCBlockCipher(engine));
+        // set key with iv
+        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
+
+        byte[] outBuff = new byte[text.length];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        cipher.doFinal(outBuff, offset);
+
+        return outBuff;
+    }
+
+    public byte[] aesCbcDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[16];
+        }
+        // create AES cipher
+        BlockCipher engine = new AESEngine();
+        BufferedBlockCipher cipher = new BufferedBlockCipher(new CBCBlockCipher(engine));
+        // set key with iv
+        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
+
+        byte[] outBuff = new byte[text.length];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        cipher.doFinal(outBuff, offset);
+
+        return outBuff;
+    }
+
+    public byte[] aesCtrEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[16];
+        }
+        // create AES cipher
+        BlockCipher engine = new AESEngine();
+        BufferedBlockCipher cipher = new BufferedBlockCipher(new SICBlockCipher(engine));
+        // set key with iv
+        cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
+
+        byte[] outBuff = new byte[text.length];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        cipher.doFinal(outBuff, offset);
+
+        return outBuff;
+    }
+
+    public byte[] aesCtrDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+        // create default initialize vector
+        if (iv == null) {
+            iv = new byte[16];
+        }
+        // create AES cipher
+        BlockCipher engine = new AESEngine();
+        BufferedBlockCipher cipher = new BufferedBlockCipher(new SICBlockCipher(engine));
+        // set key with iv
+        cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
+
+        byte[] outBuff = new byte[text.length];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
+        cipher.doFinal(outBuff, offset);
+
+        return outBuff;
+    }
+
+
 
     void aesEcbExample() throws InvalidCipherTextException {
-        byte[] text = "jetbrainintellij".getBytes(StandardCharsets.UTF_8);
+        byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
         byte[] ret;
-
 
         ret = aesEcbEncrypt(aes_128bit_16byte, text);
         print(ret);
-        ret = aesEcbDectypt(aes_128bit_16byte, ret);
+        ret = aesEcbDecrypt(aes_128bit_16byte, ret);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
         ret = aesEcbEncrypt(aes_192bit_24byte, text);
         print(ret);
-        ret = aesEcbDectypt(aes_192bit_24byte, ret);
+        ret = aesEcbDecrypt(aes_192bit_24byte, ret);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
         ret = aesEcbEncrypt(aes_256bit_32byte, text);
         print(ret);
-        ret = aesEcbDectypt(aes_256bit_32byte, ret);
+        ret = aesEcbDecrypt(aes_256bit_32byte, ret);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+    }
+
+    void aesCbcExample() throws InvalidCipherTextException {
+        byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
+        byte[] ret;
+
+        ret = aesCbcEncrypt(aes_128bit_16byte, text, null);
+        print(ret);
+        ret = aesCbcDecrypt(aes_128bit_16byte, ret, null);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
+        ret = aesCbcEncrypt(aes_192bit_24byte, text, null);
+        print(ret);
+        ret = aesCbcDecrypt(aes_192bit_24byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+        ret = aesCbcEncrypt(aes_256bit_32byte, text, null);
+        print(ret);
+        ret = aesCbcDecrypt(aes_256bit_32byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+    }
+
+    void aesCtrExample() throws InvalidCipherTextException {
+        byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
+        byte[] ret;
+
+        ret = aesCtrEncrypt(aes_128bit_16byte, text, null);
+        print(ret);
+        ret = aesCtrDecrypt(aes_128bit_16byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+        ret = aesCtrEncrypt(aes_192bit_24byte, text, null);
+        print(ret);
+        ret = aesCtrDecrypt(aes_192bit_24byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+        ret = aesCtrEncrypt(aes_256bit_32byte, text, null);
+        print(ret);
+        ret = aesCtrDecrypt(aes_256bit_32byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
     }
 
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String[] args) throws Exception {
         Aes aes = new Aes();
-        aes.aesEcbExample();
+        //aes.aesEcbExample();
+        //aes.aesCbcExample();
+        //aes.aesCtrExample();
 
 
     }
