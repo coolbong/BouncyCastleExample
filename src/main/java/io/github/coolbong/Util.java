@@ -25,4 +25,13 @@ public class Util {
 
         return sb.toString();
     }
+
+    public static void print(byte[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : arr) {
+            sb.append(String.format("%02X:", b));
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb);
+    }
 }

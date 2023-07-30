@@ -15,7 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static io.github.coolbong.Util.toHex;
-import static junit.framework.TestCase.assertEquals;
+import static io.github.coolbong.Util.print;
+
 
 public class Des {
 
@@ -165,16 +166,6 @@ public class Des {
 
         return Arrays.copyOf(outBuff, offset+ret);
     }
-
-    public static void print(byte[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : arr) {
-            sb.append(String.format("%02X:", b));
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        System.out.println(sb);
-    }
-
 
     public static void main(String[] args) throws Exception {
 

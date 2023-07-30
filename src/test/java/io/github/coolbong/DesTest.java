@@ -61,8 +61,8 @@ public class DesTest {
         };
         byte[] ret = des.desEcbPaddDecrypt(des2key, text);
 
-        System.out.println(to_bytes_variable(ret));
-        System.out.println(toHex(ret));
+        //System.out.println(to_bytes_variable(ret));
+        //System.out.println(toHex(ret));
         assertEquals("hello world", new String(ret, StandardCharsets.UTF_8));
     }
 
@@ -73,7 +73,7 @@ public class DesTest {
         byte[] text = "jetbrainintellij".getBytes(StandardCharsets.UTF_8);
         byte[] ret = des.desCbcEncrypt(des2key, text, null);
 
-        System.out.println(to_bytes_variable(ret));
+        //System.out.println(to_bytes_variable(ret));
 
         assertEquals("A97648A3ABA5BE36421DCB237A94119C", toHex(ret));
     }
@@ -99,7 +99,7 @@ public class DesTest {
         byte[] text = "hello world".getBytes(StandardCharsets.UTF_8);
         byte[] ret = des.desCbcPaddEncrypt(des2key, text, null);
 
-        System.out.println(to_bytes_variable(ret));
+        //System.out.println(to_bytes_variable(ret));
 
         assertEquals("3C05C505BE37C540CF44C48887FE9561", toHex(ret));
     }
