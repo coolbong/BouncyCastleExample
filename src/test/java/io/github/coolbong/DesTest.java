@@ -72,14 +72,11 @@ public class DesTest {
 
         byte[] text = "jetbrainintellij".getBytes(StandardCharsets.UTF_8);
         byte[] ret = des.desCbcEncrypt(des2key, text, null);
-
-        //System.out.println(to_bytes_variable(ret));
-
         assertEquals("A97648A3ABA5BE36421DCB237A94119C", toHex(ret));
     }
 
     @Test
-    public void des_cbc_descrypt() throws InvalidCipherTextException {
+    public void des_cbc_decrypt() throws InvalidCipherTextException {
         Des des = new Des();
         byte[] text = {
                 (byte)0xa9, (byte)0x76, (byte)0x48, (byte)0xa3,
@@ -89,6 +86,33 @@ public class DesTest {
         };
 
         byte[] ret = des.desCbcDecrypt(des2key, text, null);
+
+        assertEquals("jetbrainintellij", new String(ret, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void des_cbc_encrypt_with_iv() throws InvalidCipherTextException {
+        Des des = new Des();
+
+        byte[] text = "jetbrainintellij".getBytes(StandardCharsets.UTF_8);
+        byte[] iv = new byte[8];
+        iv[7] = 0x01;
+        byte[] ret = des.desCbcEncrypt(des2key, text, iv);
+        assertEquals("852A4631EEC8BC6F3412C0BC3D6BA9B2", toHex(ret));
+    }
+
+    @Test
+    public void des_cbc_decrypt_with_iv() throws InvalidCipherTextException {
+        Des des = new Des();
+        byte[] text = {
+                (byte)0x85, (byte)0x2a, (byte)0x46, (byte)0x31, (byte)0xee, (byte)0xc8, (byte)0xbc, (byte)0x6f,
+                (byte)0x34, (byte)0x12, (byte)0xc0, (byte)0xbc, (byte)0x3d, (byte)0x6b, (byte)0xa9, (byte)0xb2
+        };
+        byte[] iv = new byte[8];
+        iv[7] = 0x01;
+
+
+        byte[] ret = des.desCbcDecrypt(des2key, text, iv);
 
         assertEquals("jetbrainintellij", new String(ret, StandardCharsets.UTF_8));
     }

@@ -85,6 +85,16 @@ public class AesTest {
     }
 
     @Test
+    public void aes_cbc_256_encrypt_with_iv() throws InvalidCipherTextException {
+        Aes aes = new Aes();
+        byte[] iv = new byte[16];
+        iv[15] = 0x01;
+        byte[] ret = aes.aesCbcEncrypt(aes_256bit_32byte, text, iv);
+        //System.out.println(to_bytes_variable(ret));
+        assertEquals("CE55142F9695ED80CE996B9A6AED2AB84025FAEDB031DFED596CDE64B6D1F237", toHex(ret));
+    }
+
+    @Test
     public void aes_cbc_256_decrypt() throws InvalidCipherTextException {
         Aes aes = new Aes();
         byte[] text = {
@@ -102,6 +112,15 @@ public class AesTest {
         Aes aes = new Aes();
         byte[] ret = aes.aesCbcEncrypt(aes_192bit_24byte, text, null);
         assertEquals("F31848F53CC2DBCD77AE068BA224EACF574EAE507587FBF49C8B6DDC4C275A6E", toHex(ret));
+    }
+
+    @Test
+    public void aes_cbc_192_encrypt_with_iv() throws InvalidCipherTextException {
+        Aes aes = new Aes();
+        byte[] iv = new byte[16];
+        iv[15] = 0x01;
+        byte[] ret = aes.aesCbcEncrypt(aes_192bit_24byte, text, iv);
+        assertEquals("ADD43485045BA93D92BB8488001206E96F52B92F1C7B4FA20046DD9360CEDA9A", toHex(ret));
     }
 
     @Test
@@ -123,6 +142,16 @@ public class AesTest {
         byte[] ret = aes.aesCbcEncrypt(aes_128bit_16byte, text, null);
         //System.out.println(to_bytes_variable(ret));
         assertEquals("3D17A921520E975F22BD902EAB28E8BCE84C105D480680B4DCED7D6318F6CBEE", toHex(ret));
+    }
+
+    @Test
+    public void aes_cbc_128_encrypt_iv() throws InvalidCipherTextException {
+        Aes aes = new Aes();
+        byte[] iv = new byte[16];
+        iv[15] = 0x01;
+        byte[] ret = aes.aesCbcEncrypt(aes_128bit_16byte, text, iv);
+        //System.out.println(to_bytes_variable(ret));
+        assertEquals("A7A2A27B87D6313F085A8C99F861123B10429186871F8FBE177BFD12F16F607C", toHex(ret));
     }
 
     @Test
@@ -183,7 +212,6 @@ public class AesTest {
     public void aes_ctr_128_encrypt() throws InvalidCipherTextException {
         Aes aes = new Aes();
         byte[] ret = aes.aesCtrEncrypt(aes_128bit_16byte, text, null);
-        System.out.println(to_bytes_variable(ret));
         assertEquals("EF10A58AE1F010B3C10B6A8B4494F417324F6FE6230B8012FC490D43BF67C94A", toHex(ret));
     }
 

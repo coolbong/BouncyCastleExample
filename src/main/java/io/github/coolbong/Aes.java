@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static io.github.coolbong.Util.print;
+import static io.github.coolbong.Util.toHex;
 
 public class Aes {
 
@@ -312,21 +313,47 @@ public class Aes {
 
     void aesCtrExample() throws InvalidCipherTextException {
         byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
+        //System.out.println(toHex(text));
+        byte[] iv = new byte[16];
+        iv[15] = 0x01;
         byte[] ret;
 
         ret = aesCtrEncrypt(aes_128bit_16byte, text, null);
-        print(ret);
+        //print(ret);
+        System.out.println(toHex(ret));
         ret = aesCtrDecrypt(aes_128bit_16byte, ret, null);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
         ret = aesCtrEncrypt(aes_192bit_24byte, text, null);
-        print(ret);
+        //print(ret);
+        System.out.println(toHex(ret));
         ret = aesCtrDecrypt(aes_192bit_24byte, ret, null);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
         ret = aesCtrEncrypt(aes_256bit_32byte, text, null);
-        print(ret);
+        //print(ret);
+        System.out.println(toHex(ret));
         ret = aesCtrDecrypt(aes_256bit_32byte, ret, null);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+
+
+        ret = aesCtrEncrypt(aes_128bit_16byte, text, iv);
+        print(ret);
+        System.out.println(toHex(ret));
+        ret = aesCtrDecrypt(aes_128bit_16byte, ret, iv);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+        ret = aesCtrEncrypt(aes_192bit_24byte, text, iv);
+        print(ret);
+        System.out.println(toHex(ret));
+        ret = aesCtrDecrypt(aes_192bit_24byte, ret, iv);
+        System.out.println(new String(ret, StandardCharsets.UTF_8));
+
+        ret = aesCtrEncrypt(aes_256bit_32byte, text, iv);
+        print(ret);
+        System.out.println(toHex(ret));
+        ret = aesCtrDecrypt(aes_256bit_32byte, ret, iv);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
     }
 
@@ -355,10 +382,10 @@ public class Aes {
         Aes aes = new Aes();
         //aes.aesEcbExample();
         //aes.aesCbcExample();
-        //aes.aesCtrExample();
+        aes.aesCtrExample();
         //aes.aesEcbPadExample();
         //aes.aesCbcPadExample();
-        aes.aesCtrPadExample();
+        //aes.aesCtrPadExample();
 
     }
 }
