@@ -12,6 +12,16 @@ public class Util {
         return sb.toString();
     }
 
+    public static String toHex(byte[] arr, String delim) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : arr) {
+            sb.append(String.format("%02X%s", b, delim));
+        }
+        sb.deleteCharAt(sb.length() - 1);
+
+        return sb.toString();
+    }
+
 
 
     public static String to_bytes_variable(byte[] arr) {
