@@ -6,7 +6,6 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -26,7 +25,7 @@ public class Rsa {
             PemObject pemObj = reader.readPemObject();
 
             return RSAPrivateKey.getInstance(pemObj.getContent());
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
         return null;
     }
@@ -43,9 +42,7 @@ public class Rsa {
             BigInteger m = rsaPublicKey.getModulus();
             BigInteger e = rsaPublicKey.getPublicExponent();
 
-            RSAPublicKey key = new RSAPublicKey(m, e);
-
-            return key;
+            return new RSAPublicKey(m, e);
             //return RSAPublicKey.getInstance(pemObj.getContent());
         } catch (IOException | InvalidKeySpecException | NoSuchAlgorithmException ignored) {
         }
