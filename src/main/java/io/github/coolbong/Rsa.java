@@ -31,7 +31,7 @@ public class Rsa {
     }
 
 
-    public RSAPublicKey readPubliKey(File file) {
+    public RSAPublicKey readPublicKey(File file) {
         try {
             PemReader reader = new PemReader(new FileReader(file));
             PemObject pemObj = reader.readPemObject();
