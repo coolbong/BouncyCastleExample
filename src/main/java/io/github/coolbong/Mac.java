@@ -43,7 +43,7 @@ public class Mac {
         return output;
     }
 
-    public byte[] aesCamc128(byte[] key, byte[] text) {
+    public byte[] aesCmac128(byte[] key, byte[] text) {
         CMac mac = new CMac(new AESEngine(), 128);
         mac.init(new KeyParameter(key));
         byte[] output = new byte[mac.getMacSize()];
