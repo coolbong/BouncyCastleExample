@@ -43,7 +43,7 @@ public class Mac {
         return output;
     }
 
-    public byte[] aesCamc(byte[] key, byte[] text) {
+    public byte[] aesCamc128(byte[] key, byte[] text) {
         CMac mac = new CMac(new AESEngine(), 128);
         mac.init(new KeyParameter(key));
         byte[] output = new byte[mac.getMacSize()];
@@ -52,7 +52,7 @@ public class Mac {
         return output;
     }
 
-    public byte[] aesCmac(byte[] key, byte[] text, byte[] iv) {
+    public byte[] aesCmac128(byte[] key, byte[] text, byte[] iv) {
         CMac mac = new CMacWithIV(new AESEngine(), 128);
         mac.init(new ParametersWithIV(new KeyParameter(key), iv));
         byte[] output = new byte[mac.getMacSize()];

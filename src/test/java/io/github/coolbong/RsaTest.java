@@ -81,7 +81,7 @@ public class RsaTest {
         Rsa rsa = new Rsa();
         try {
             file = new File(resource.toURI());
-            RSAPublicKey rsaPublicKey = rsa.readPubliKey(file);
+            RSAPublicKey rsaPublicKey = rsa.readPublicKey(file);
 
             // RSA public, private key
             BigInteger m = rsaPublicKey.getModulus();
