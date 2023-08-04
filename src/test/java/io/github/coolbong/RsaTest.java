@@ -113,7 +113,30 @@ public class RsaTest {
         }
     }
 
-    //7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB
+    @Test
+    public void rsa_encryption_test_002() {
+        RSAPublicKey rsaPublicKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPublicKey = rsa.readPublicKey(Util.getResourceFile("./512/public_key.pem"));
+
+            BigInteger m = rsaPublicKey.getModulus();
+            BigInteger e = rsaPublicKey.getPublicExponent();
+
+            byte[] mod = m.toByteArray();
+            byte[] exp = e.toByteArray();
+
+            byte[] ret = rsa.encrypt(mod, exp, plaintext.getBytes(StandardCharsets.UTF_8));
+
+            Assert.assertEquals(encrypted, toHex(ret));
+        } catch (IOException ignored) {
+        }
+    }
+
+
 
     @Test
     public void rsa_decryption_test_001() {
