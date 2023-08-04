@@ -2,17 +2,19 @@ package io.github.coolbong;
 
 import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.asn1.pkcs.RSAPublicKey;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
+import static io.github.coolbong.Util.toBytes;
 import static io.github.coolbong.Util.toHex;
 import static junit.framework.TestCase.assertEquals;
 
 public class RsaTest {
-
-
 
 
     @Test
@@ -31,7 +33,6 @@ public class RsaTest {
         String dp1_ans = "00:C7:1D:94:24:39:D1:D2:89:C0:6E:36:DF:9A:11:6C:E2:23:44:6D:15:F6:16:97:7E:F9:E6:84:9B:F9:2D:B0:5B";
         String dq1_ans = "32:CC:36:AD:05:46:50:12:75:8A:0A:3A:E9:CC:F2:73:E3:0D:A8:B4:44:C9:C7:FA:CF:46:DE:B1:E1:B7:71:27";
         String qInv_ans = "00:91:7C:10:EF:24:18:0F:D3:4A:C3:D0:14:89:4E:34:92:A2:E6:D6:39:07:38:30:10:01:A1:5E:AF:DE:32:1B:41";
-        //URL resource = getClass().getClassLoader().getResource("./512/private_key.pem");
         File file;
         Rsa rsa = new Rsa();
         try {
@@ -94,4 +95,126 @@ public class RsaTest {
             throw new RuntimeException(e.toString());
         }
     }
+
+
+    @Test
+    public void rsa_encryption_test_001() {
+        RSAPublicKey rsaPublicKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPublicKey = rsa.readPublicKey(Util.getResourceFile("./512/public_key.pem"));
+            byte[] ret = rsa.encrypt(rsaPublicKey.getModulus(), rsaPublicKey.getPublicExponent(), plaintext.getBytes(StandardCharsets.UTF_8));
+
+            Assert.assertEquals(encrypted, toHex(ret));
+        } catch (IOException ignored) {
+        }
+    }
+
+    //7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB
+
+    @Test
+    public void rsa_decryption_test_001() {
+        RSAPrivateKey rsaPrivateKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+            byte[] ret = rsa.decrypt(rsaPrivateKey.getModulus(), rsaPrivateKey.getPrivateExponent(), toBytes(encrypted));
+            //System.out.println(toHex(ret));
+            //System.out.println(new String(ret, StandardCharsets.UTF_8));
+            Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Test
+    public void rsa_decryption_test_002() {
+        RSAPrivateKey rsaPrivateKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+
+            BigInteger m = rsaPrivateKey.getModulus();
+            BigInteger e = rsaPrivateKey.getPrivateExponent();
+
+            byte[] mod = m.toByteArray();
+            byte[] exp = e.toByteArray();
+            byte[] ret = rsa.decrypt(mod, exp, toBytes(encrypted));
+            Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Test
+    public void rsa_decryption_crt_test_001() {
+        RSAPrivateKey rsaPrivateKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+
+            BigInteger p = rsaPrivateKey.getPrime1();         // Prime P
+            BigInteger q = rsaPrivateKey.getPrime2();         // Prime Q
+            BigInteger dp1 = rsaPrivateKey.getExponent1();    // Prime Exponent P
+            BigInteger dq1 = rsaPrivateKey.getExponent2();    // Prime Exponent Q
+            BigInteger qInv = rsaPrivateKey.getCoefficient(); // coefficient
+
+            byte[] ret = rsa.decrypt(p, q, dp1, dq1, qInv, toBytes(encrypted));
+            //System.out.println(toHex(ret));
+            //System.out.println(new String(ret, StandardCharsets.UTF_8));
+            Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Test
+    public void test() {
+        RSAPrivateKey rsaPrivateKey;
+
+        try {
+            String plaintext = "Hello world";
+            String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
+            Rsa rsa = new Rsa();
+            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+
+            BigInteger mod = rsaPrivateKey.getModulus();
+            BigInteger exp = rsaPrivateKey.getPrivateExponent();
+            byte[] arrMod = mod.toByteArray();
+            byte[] arrExp = exp.toByteArray();
+
+            BigInteger mod2 = new BigInteger(1, arrMod);
+            BigInteger exp2 = new BigInteger(1, arrExp);
+
+            //System.out.println(mod);
+            //System.out.println(mod2);
+            //System.out.println(exp);
+            //System.out.println(exp2);
+            Assert.assertEquals(mod, mod2);
+            Assert.assertEquals(exp, exp2);
+
+            byte[] ret1 = rsa.decrypt(mod, exp, toBytes(encrypted));
+            byte[] ret2 = rsa.decrypt(mod2, exp2, toBytes(encrypted));
+
+
+            Assert.assertEquals(toHex(ret1), toHex(ret2));
+            Assert.assertEquals(new String(ret1), new String(ret2));
+            Assert.assertEquals(plaintext, new String(ret1, StandardCharsets.UTF_8));
+        } catch (IOException e) {
+        }
+    }
+
+
 }
