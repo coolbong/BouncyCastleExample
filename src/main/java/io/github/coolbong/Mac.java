@@ -50,8 +50,10 @@ public class Mac {
     }
 
     public byte[] aesCmac128(byte[] key, byte[] text) {
+        //Create CMAC / AES / 128 bit
         CMac mac = new CMac(new AESEngine(), 128);
         mac.init(new KeyParameter(key));
+
         byte[] output = new byte[mac.getMacSize()];
         mac.update(text, 0, text.length);
         mac.doFinal(output, 0);
@@ -59,7 +61,9 @@ public class Mac {
     }
 
     public byte[] aesCmac128(byte[] key, byte[] text, byte[] iv) {
+        //Create CMAC With IV / AES / 128 bit
         CMac mac = new CMacWithIV(new AESEngine(), 128);
+        // create Key Parameter with IV
         mac.init(new ParametersWithIV(new KeyParameter(key), iv));
         byte[] output = new byte[mac.getMacSize()];
         mac.update(text, 0, text.length);

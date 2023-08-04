@@ -1,8 +1,8 @@
 package io.github.coolbong;
 
 import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.Test;
+
 
 import static io.github.coolbong.Util.*;
 import static org.junit.Assert.assertEquals;
@@ -39,6 +39,54 @@ public class MacTest {
         Mac mac = new Mac();
         byte[] ret = mac.desMacMethod2Alg3(key, txt, null);
         assertEquals("E5047A15E8C98E0B", toHex(ret));
+    }
+
+    @Test
+    public void aes_cmac_001() {
+        byte[] key = toBytes("0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B");
+        byte[] txt = toBytes("4869205468657265");
+
+        Mac mac = new Mac();
+        byte[] ret = mac.aesCmac128(key, txt);
+        assertEquals("A962DD30ACD5BFED671C4BB64E8FBE42", toHex(ret));
+    }
+
+    @Test
+    public void aes_cmac_002() {
+        //byte[] key = "ABCDEFGHIJKLMNOP".getBytes(StandardCharsets.UTF_8);
+        //byte[] txt = "Hello world".getBytes(StandardCharsets.UTF_8);
+        byte[] key = {
+                (byte)0x41, (byte)0x42, (byte)0x43, (byte)0x44, (byte)0x45, (byte)0x46, (byte)0x47, (byte)0x48,
+                (byte)0x49, (byte)0x4a, (byte)0x4b, (byte)0x4c, (byte)0x4d, (byte)0x4e, (byte)0x4f, (byte)0x50
+        };
+        byte[] txt = {
+                (byte)0x48, (byte)0x65, (byte)0x6c, (byte)0x6c, (byte)0x6f, (byte)0x20, (byte)0x77, (byte)0x6f,
+                (byte)0x72, (byte)0x6c, (byte)0x64
+        };
+        Mac mac = new Mac();
+        byte[] ret = mac.aesCmac128(key, txt);
+        print(ret);
+        assertEquals("7E6F0950FB03F381BA82D350F88B7638", toHex(ret));
+    }
+
+    @Test
+    public void aes_cmac_003() {
+        //byte[] key = "ABCDEFGHIJKLMNOP".getBytes(StandardCharsets.UTF_8);
+        //byte[] txt = "Hello world".getBytes(StandardCharsets.UTF_8);
+        byte[] key = {
+                (byte)0x41, (byte)0x42, (byte)0x43, (byte)0x44, (byte)0x45, (byte)0x46, (byte)0x47, (byte)0x48,
+                (byte)0x49, (byte)0x4a, (byte)0x4b, (byte)0x4c, (byte)0x4d, (byte)0x4e, (byte)0x4f, (byte)0x50
+        };
+        byte[] txt = {
+                (byte)0x48, (byte)0x65, (byte)0x6c, (byte)0x6c, (byte)0x6f, (byte)0x20, (byte)0x77, (byte)0x6f,
+                (byte)0x72, (byte)0x6c, (byte)0x64
+        };
+        byte[] iv = new byte[16];
+        iv[15] = 0x01;
+        Mac mac = new Mac();
+        byte[] ret = mac.aesCmac128(key, txt, iv);
+        print(ret);
+        assertEquals("3E3BA415A237749D9FE43D32D04DBE48", toHex(ret));
     }
 
 
