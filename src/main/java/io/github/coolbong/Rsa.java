@@ -8,6 +8,7 @@ import org.bouncycastle.util.io.pem.PemReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -18,16 +19,16 @@ public class Rsa {
 
 
 
-    public RSAPrivateKey readPrivateKey(File file) {
-        //
-        try {
-            PemReader reader = new PemReader(new FileReader(file));
-            PemObject pemObj = reader.readPemObject();
+    public RSAPrivateKey readPrivateKey(File file) throws IOException{
+        FileReader reader = new FileReader(file);
+        return readPrivateKey(reader);
+    }
 
-            return RSAPrivateKey.getInstance(pemObj.getContent());
-        } catch (IOException ignored) {
-        }
-        return null;
+    public RSAPrivateKey readPrivateKey(Reader reader) throws IOException {
+        PemReader pemReader = new PemReader(reader);
+        PemObject pemObj = pemReader.readPemObject();
+
+        return RSAPrivateKey.getInstance(pemObj.getContent());
     }
 
 

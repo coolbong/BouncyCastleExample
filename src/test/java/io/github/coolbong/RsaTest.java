@@ -6,12 +6,13 @@ import org.junit.Test;
 
 import java.io.File;
 import java.math.BigInteger;
-import java.net.URL;
 
 import static io.github.coolbong.Util.toHex;
 import static junit.framework.TestCase.assertEquals;
 
 public class RsaTest {
+
+
 
 
     @Test
@@ -30,11 +31,11 @@ public class RsaTest {
         String dp1_ans = "00:C7:1D:94:24:39:D1:D2:89:C0:6E:36:DF:9A:11:6C:E2:23:44:6D:15:F6:16:97:7E:F9:E6:84:9B:F9:2D:B0:5B";
         String dq1_ans = "32:CC:36:AD:05:46:50:12:75:8A:0A:3A:E9:CC:F2:73:E3:0D:A8:B4:44:C9:C7:FA:CF:46:DE:B1:E1:B7:71:27";
         String qInv_ans = "00:91:7C:10:EF:24:18:0F:D3:4A:C3:D0:14:89:4E:34:92:A2:E6:D6:39:07:38:30:10:01:A1:5E:AF:DE:32:1B:41";
-        URL resource = getClass().getClassLoader().getResource("./512/private_key.pem");
+        //URL resource = getClass().getClassLoader().getResource("./512/private_key.pem");
         File file;
         Rsa rsa = new Rsa();
         try {
-            file = new File(resource.toURI());
+            file = Util.getResourceFile("./512/private_key.pem");
             RSAPrivateKey rsaPrivateKey = rsa.readPrivateKey(file);
 
             // RSA public, private key
@@ -76,11 +77,10 @@ public class RsaTest {
                 "EC:56:44:E0:98:0B:20:52:23:03:AA:42:62:56:05:61:61";
         String e_ans = "01:00:01";
 
-        URL resource = getClass().getClassLoader().getResource("./512/public_key.pem");
         File file;
         Rsa rsa = new Rsa();
         try {
-            file = new File(resource.toURI());
+            file = Util.getResourceFile("./512/public_key.pem");
             RSAPublicKey rsaPublicKey = rsa.readPublicKey(file);
 
             // RSA public, private key
