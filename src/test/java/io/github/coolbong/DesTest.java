@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.nio.charset.StandardCharsets;
 
 import static io.github.coolbong.Util.toHex;
-import static io.github.coolbong.Util.to_bytes_variable;
 import static junit.framework.TestCase.assertEquals;
 
 public class DesTest {
