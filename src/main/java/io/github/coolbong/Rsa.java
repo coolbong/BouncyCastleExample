@@ -22,12 +22,12 @@ public class Rsa {
 
 
 
-    public RSAPrivateKey readPrivateKey(File file) throws IOException{
+    public RSAPrivateKey readPemPrivateKey(File file) throws IOException{
         FileReader reader = new FileReader(file);
-        return readPrivateKey(reader);
+        return readPemPrivateKey(reader);
     }
 
-    public RSAPrivateKey readPrivateKey(Reader reader) throws IOException {
+    public RSAPrivateKey readPemPrivateKey(Reader reader) throws IOException {
         PemReader pemReader = new PemReader(reader);
         PemObject pemObj = pemReader.readPemObject();
 
@@ -35,11 +35,11 @@ public class Rsa {
     }
 
 
-    public RSAPublicKey readPublicKey(File file) throws IOException {
-        return readPublicKey(new FileReader(file));
+    public RSAPublicKey readPemPublicKey(File file) throws IOException {
+        return readPemPublicKey(new FileReader(file));
     }
 
-    public RSAPublicKey readPublicKey(Reader reader) throws IOException {
+    public RSAPublicKey readPemPublicKey(Reader reader) throws IOException {
         try {
             PemReader pemReader = new PemReader(reader);
             PemObject pemObj = pemReader.readPemObject();

@@ -10,11 +10,17 @@ public class HMacMd5Test {
 
     @Test
     public void hmac_md5_rfc_2202_test_001() {
-        byte[] key = toBytes("0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B");
-        byte[] msg = toBytes("4869205468657265");
+        byte[] key = {
+                (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b,
+                (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b
+        };
+        byte[] msg = {
+                (byte)0x48, (byte)0x69, (byte)0x20, (byte)0x54, (byte)0x68, (byte)0x65, (byte)0x72, (byte)0x65
+        };
 
         Mac mac = new Mac();
         byte[] ret = mac.hmacMd5(key, msg);
+
         assertEquals("9294727A3638BB1C13F48EF8158BFC9D", toHex(ret));
     }
 

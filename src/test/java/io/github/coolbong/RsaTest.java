@@ -37,7 +37,7 @@ public class RsaTest {
         Rsa rsa = new Rsa();
         try {
             file = Util.getResourceFile("./512/private_key.pem");
-            RSAPrivateKey rsaPrivateKey = rsa.readPrivateKey(file);
+            RSAPrivateKey rsaPrivateKey = rsa.readPemPrivateKey(file);
 
             // RSA public, private key
             BigInteger m = rsaPrivateKey.getModulus();
@@ -82,7 +82,7 @@ public class RsaTest {
         Rsa rsa = new Rsa();
         try {
             file = Util.getResourceFile("./512/public_key.pem");
-            RSAPublicKey rsaPublicKey = rsa.readPublicKey(file);
+            RSAPublicKey rsaPublicKey = rsa.readPemPublicKey(file);
 
             // RSA public, private key
             BigInteger m = rsaPublicKey.getModulus();
@@ -105,7 +105,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPublicKey = rsa.readPublicKey(Util.getResourceFile("./512/public_key.pem"));
+            rsaPublicKey = rsa.readPemPublicKey(Util.getResourceFile("./512/public_key.pem"));
             byte[] ret = rsa.encrypt(rsaPublicKey.getModulus(), rsaPublicKey.getPublicExponent(), plaintext.getBytes(StandardCharsets.UTF_8));
 
             Assert.assertEquals(encrypted, toHex(ret));
@@ -121,7 +121,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPublicKey = rsa.readPublicKey(Util.getResourceFile("./512/public_key.pem"));
+            rsaPublicKey = rsa.readPemPublicKey(Util.getResourceFile("./512/public_key.pem"));
 
             BigInteger m = rsaPublicKey.getModulus();
             BigInteger e = rsaPublicKey.getPublicExponent();
@@ -146,7 +146,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+            rsaPrivateKey = rsa.readPemPrivateKey(Util.getResourceFile("./512/private_key.pem"));
             byte[] ret = rsa.decrypt(rsaPrivateKey.getModulus(), rsaPrivateKey.getPrivateExponent(), toBytes(encrypted));
             //System.out.println(toHex(ret));
             //System.out.println(new String(ret, StandardCharsets.UTF_8));
@@ -164,7 +164,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+            rsaPrivateKey = rsa.readPemPrivateKey(Util.getResourceFile("./512/private_key.pem"));
 
             BigInteger m = rsaPrivateKey.getModulus();
             BigInteger e = rsaPrivateKey.getPrivateExponent();
@@ -186,7 +186,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+            rsaPrivateKey = rsa.readPemPrivateKey(Util.getResourceFile("./512/private_key.pem"));
 
             BigInteger p = rsaPrivateKey.getPrime1();         // Prime P
             BigInteger q = rsaPrivateKey.getPrime2();         // Prime Q
@@ -211,7 +211,7 @@ public class RsaTest {
             String plaintext = "Hello world";
             String encrypted = "7CD7F0A7799E694D880DFDB473C8D12FDC095B760A7DB75518CE9939485EF2A3B03760E400F31FD4126D3409962EE06451DF430749FCEAEEE154DF5AC0BAD6DB";
             Rsa rsa = new Rsa();
-            rsaPrivateKey = rsa.readPrivateKey(Util.getResourceFile("./512/private_key.pem"));
+            rsaPrivateKey = rsa.readPemPrivateKey(Util.getResourceFile("./512/private_key.pem"));
 
             BigInteger mod = rsaPrivateKey.getModulus();
             BigInteger exp = rsaPrivateKey.getPrivateExponent();
