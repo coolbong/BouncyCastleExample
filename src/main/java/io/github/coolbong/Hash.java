@@ -6,6 +6,11 @@ import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Hash {
 
 
@@ -14,8 +19,8 @@ public class Hash {
         Digest digest = new MD5Digest();
 
         // get block size for output buffer
-        int blockSize = digest.getDigestSize();
-        byte[] buf = new byte[blockSize];
+        int hashSize = digest.getDigestSize();
+        byte[] buf = new byte[hashSize];
 
         digest.update(text, 0, text.length);
         digest.doFinal(buf, 0);
@@ -28,8 +33,8 @@ public class Hash {
         Digest digest = new SHA1Digest();
 
         //get block size for output buffer
-        int blockSize = digest.getDigestSize();
-        byte[] buf = new byte[blockSize];
+        int hashSize = digest.getDigestSize();
+        byte[] buf = new byte[hashSize];
 
         digest.update(text, 0, text.length);
         digest.doFinal(buf, 0);
@@ -42,8 +47,8 @@ public class Hash {
         Digest digest = new SHA256Digest();
 
         //get block size for output buffer
-        int blockSize = digest.getDigestSize();
-        byte[] buf = new byte[blockSize];
+        int hashSize = digest.getDigestSize();
+        byte[] buf = new byte[hashSize];
 
         digest.update(text, 0, text.length);
         digest.doFinal(buf, 0);
@@ -55,12 +60,40 @@ public class Hash {
         Digest digest = new SHA512Digest();
 
         //get block size for output buffer
-        int blockSize = digest.getDigestSize();
-        byte[] buf = new byte[blockSize];
+        int hashSize = digest.getDigestSize();
+        byte[] buf = new byte[hashSize];
 
         digest.update(text, 0, text.length);
         digest.doFinal(buf, 0);
         return buf;
+    }
+
+
+    public byte[] sha256(File file) {
+        Digest digest = new SHA256Digest();
+
+        int hashSize = digest.getDigestSize();
+        byte[] outBuff = new byte[hashSize];
+
+
+        byte[] buf = new byte[4*1024]; // 4KB
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            int len;
+            while ((len = fis.read(buf)) > 0) {
+                digest.update(buf, 0, len);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (Exception ign) {}
+            }
+        }
+
+        digest.doFinal(outBuff, 0);
+        return outBuff;
     }
 
 
