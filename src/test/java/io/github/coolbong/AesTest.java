@@ -10,11 +10,11 @@ import static junit.framework.TestCase.assertEquals;
 
 public class AesTest {
 
-    static byte[] aes_128bit_16byte = "ABCDEFGHIJKLMNOP".getBytes(StandardCharsets.UTF_8);
-    static byte[] aes_192bit_24byte = "ABCDEFGHIJKLMNOPQRSTUVWX".getBytes(StandardCharsets.UTF_8);
-    static byte[] aes_256bit_32byte = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef".getBytes(StandardCharsets.UTF_8);
+    static final byte[] aes_128bit_16byte = "ABCDEFGHIJKLMNOP".getBytes(StandardCharsets.UTF_8);
+    static final byte[] aes_192bit_24byte = "ABCDEFGHIJKLMNOPQRSTUVWX".getBytes(StandardCharsets.UTF_8);
+    static final byte[] aes_256bit_32byte = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef".getBytes(StandardCharsets.UTF_8);
 
-    static byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
+    static final byte[] text = "jetbrainintellijpasswordoverflow".getBytes(StandardCharsets.UTF_8);
 
     @Test
     public void aes_ecb_256_encrypt() throws InvalidCipherTextException {

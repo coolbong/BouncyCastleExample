@@ -91,7 +91,7 @@ public class MacTest {
 
 
     @Test
-    public void aes_mac_001() throws InvalidCipherTextException {
+    public void aes_mac_001() {
         byte[] key = toBytes("404142434445464748494A4B4C4D4E4F");
         //byte[] txt = toBytes("6A6574627261696E696E74656C6C696A");
         byte[] txt = { // jetbrainintellijpasswordoverflow
@@ -107,7 +107,7 @@ public class MacTest {
     }
 
     @Test
-    public void aes_mac_002() throws InvalidCipherTextException {
+    public void aes_mac_002() {
         byte[] key = toBytes("404142434445464748494A4B4C4D4E4F");
         byte[] txt = { // jetbrainintellijpasswordoverflow
                 (byte)0xf3, (byte)0x18, (byte)0x48, (byte)0xf5, (byte)0x3c, (byte)0xc2, (byte)0xdb, (byte)0xcd,

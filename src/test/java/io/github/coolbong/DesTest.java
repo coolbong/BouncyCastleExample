@@ -11,12 +11,12 @@ import static junit.framework.TestCase.assertEquals;
 
 public class DesTest {
 
-    byte[] des1Key = {
+    static final byte[] des1Key = {
             (byte) 0x40, (byte) 0x41, (byte) 0x42, (byte) 0x43, (byte) 0x44, (byte) 0x45, (byte) 0x46, (byte) 0x47,
     };
 
     // TDES 2 key
-    byte[] des2key = {
+    static final byte[] des2key = {
             (byte)0x40, (byte)0x41, (byte)0x42, (byte)0x43, (byte)0x44, (byte)0x45, (byte)0x46, (byte)0x47,
             (byte)0x48, (byte)0x49, (byte)0x4a, (byte)0x4b, (byte)0x4c, (byte)0x4d, (byte)0x4e, (byte)0x4f
     };
