@@ -27,6 +27,7 @@ public class Mac {
     }
 
     public byte[] hmacSha1(byte[] key, byte[] text) {
+        // create HMAC
         HMac mac = new HMac(new SHA1Digest());
         mac.init(new KeyParameter(key));
         int macSize = mac.getMacSize();

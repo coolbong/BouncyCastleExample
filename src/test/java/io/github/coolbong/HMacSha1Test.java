@@ -2,14 +2,23 @@ package io.github.coolbong;
 
 import org.junit.Test;
 
-import static io.github.coolbong.Util.toBytes;
-import static io.github.coolbong.Util.toHex;
+import java.nio.charset.StandardCharsets;
+
+import static io.github.coolbong.Util.*;
 import static org.junit.Assert.assertEquals;
 
 public class HMacSha1Test {
 
     @Test
     public void hmac_sha1_rfc_2202_test_001() {
+        //
+        //test_case =     5
+        //key =           0x0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c
+        //key_len =       16
+        //data =          "Test With Truncation"
+        //data_len =      20
+        //digest =        0x56461ef2342edc00f9bab995690efd4c
+        //digest-96       0x56461ef2342edc00f9bab995
         byte[] key = toBytes("0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B0B");
         byte[] msg = toBytes("4869205468657265");
 
@@ -77,6 +86,23 @@ public class HMacSha1Test {
         Mac mac = new Mac();
         byte[] ret = mac.hmacSha1(key, msg);
         assertEquals("E8E99D0F45237D786D6BBAA7965C7808BBFF1A91", toHex(ret));
+    }
+
+    @Test
+    public void hmac_sha1_rfc_2202_test_008() {
+        //test_case =     2
+        //key =           "Jefe"
+        //key_len =       4
+        //data =          "what do ya want for nothing?"
+        //data_len =      28
+        //digest =        0xeffcdf6ae5eb2fa2d27416d5f184df9c259a7c79
+        byte[] key = "Jefe".getBytes(StandardCharsets.UTF_8);
+        byte[] msg = "what do ya want for nothing?".getBytes(StandardCharsets.UTF_8);
+
+
+        Mac mac = new Mac();
+        byte[] ret = mac.hmacSha1(key, msg);
+        assertEquals("EFFCDF6AE5EB2FA2D27416D5F184DF9C259A7C79", toHex(ret));
     }
 
 }

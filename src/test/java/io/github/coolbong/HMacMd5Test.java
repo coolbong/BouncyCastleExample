@@ -2,6 +2,8 @@ package io.github.coolbong;
 
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
+
 import static io.github.coolbong.Util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -17,6 +19,26 @@ public class HMacMd5Test {
         byte[] msg = {
                 (byte)0x48, (byte)0x69, (byte)0x20, (byte)0x54, (byte)0x68, (byte)0x65, (byte)0x72, (byte)0x65
         };
+
+        Mac mac = new Mac();
+        byte[] ret = mac.hmacMd5(key, msg);
+
+        assertEquals("9294727A3638BB1C13F48EF8158BFC9D", toHex(ret));
+    }
+
+    public void hmac_md5_rfc_2202_test_001_01() {
+        //test_case =     1
+        //key =           0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b
+        //key_len =       16
+        //data =          "Hi There"
+        //data_len =      8
+        //digest =        0x9294727a3638bb1c13f48ef8158bfc9d
+
+        byte[] key = {
+                (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b,
+                (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b, (byte)0x0b
+        };
+        byte[] msg = "Hi There".getBytes(StandardCharsets.UTF_8);
 
         Mac mac = new Mac();
         byte[] ret = mac.hmacMd5(key, msg);
