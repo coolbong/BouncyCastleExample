@@ -6,7 +6,6 @@ import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.DESedeEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
-import org.bouncycastle.crypto.paddings.ISO7816d4Padding;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
@@ -28,7 +27,7 @@ public class Des {
         // set key
         cipher.init(true, new KeyParameter(key));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -36,15 +35,15 @@ public class Des {
     }
 
 
-    public byte[] desEcbDecrypt(byte[] key, byte[] encrypted) throws InvalidCipherTextException {
+    public byte[] desEcbDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
         // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         BufferedBlockCipher cipher = new BufferedBlockCipher(engine);
         // set key
         cipher.init(false, new KeyParameter(key));
 
-        byte[] outBuff = new byte[encrypted.length];
-        int offset = cipher.processBytes(encrypted, 0, encrypted.length, outBuff, 0);
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
+        int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
         return outBuff;
@@ -98,7 +97,7 @@ public class Des {
         // set key with iv
         cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -116,7 +115,7 @@ public class Des {
         // set key with iv
         cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 

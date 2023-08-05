@@ -30,7 +30,7 @@ public class Aes {
         // set key
         cipher.init(true, new KeyParameter(key));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -44,7 +44,7 @@ public class Aes {
         // set key
         cipher.init(false, new KeyParameter(key));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -93,7 +93,7 @@ public class Aes {
         // set key with iv
         cipher.init(true, new ParametersWithIV(new KeyParameter(key), iv));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -111,7 +111,7 @@ public class Aes {
         // set key with iv
         cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
@@ -185,7 +185,7 @@ public class Aes {
         // set key with iv
         cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
 
-        byte[] outBuff = new byte[text.length];
+        byte[] outBuff = new byte[cipher.getOutputSize(text.length)];
         int offset = cipher.processBytes(text, 0, text.length, outBuff, 0);
         cipher.doFinal(outBuff, offset);
 
