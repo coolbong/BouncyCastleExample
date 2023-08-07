@@ -77,6 +77,15 @@ public class Seed {
         return outBuff;
     }
 
+
+    public byte[] seedCbcEncrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+        return seedCbcEncrypt(key, text, null);
+    }
+
+    public byte[] seedCbcDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+        return seedCbcDecrypt(key, text, null);
+    }
+
     public byte[] seedCbcEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
         if (iv == null) {
             iv = new byte[16];
