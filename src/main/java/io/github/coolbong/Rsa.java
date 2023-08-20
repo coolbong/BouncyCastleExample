@@ -2,7 +2,10 @@ package io.github.coolbong;
 
 import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.asn1.pkcs.RSAPublicKey;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.engines.RSAEngine;
+import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
+import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.bouncycastle.util.io.pem.PemObject;
@@ -15,6 +18,7 @@ import java.io.Reader;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -39,7 +43,7 @@ public class Rsa {
         return readPemPublicKey(new FileReader(file));
     }
 
-    public RSAPublicKey readPemPublicKey(Reader reader) throws IOException {
+    public RSAPublicKey readPemPublicKey(Reader reader) {
         try {
             PemReader pemReader = new PemReader(reader);
             PemObject pemObj = pemReader.readPemObject();
@@ -58,8 +62,26 @@ public class Rsa {
     }
 
 
-    public byte[] encrypt(byte[] m, byte[] e, byte[] txt) {
 
+    public void generateRsaKey() throws NoSuchAlgorithmException {
+
+        RSAKeyGenerationParameters pram = new RSAKeyGenerationParameters(
+                new BigInteger("010001", 16),
+                SecureRandom.getInstance("SHA1PRNG"),
+                4096,
+                80
+        );
+
+        RSAKeyPairGenerator generator = new RSAKeyPairGenerator();
+        generator.init(pram);
+        AsymmetricCipherKeyPair keyPair = generator.generateKeyPair();
+        System.out.println(keyPair);
+        System.out.println(keyPair.getPrivate());
+        System.out.println(keyPair.getPublic());
+    }
+
+
+    public byte[] encrypt(byte[] m, byte[] e, byte[] txt) {
         RSAEngine engine = new RSAEngine();
         // RSA Key param, public key modulus, public key exponent
         RSAKeyParameters param = new RSAKeyParameters(false, new BigInteger(1, m), new BigInteger(1, e));
@@ -69,7 +91,6 @@ public class Rsa {
     }
 
     public byte[] encrypt(BigInteger m, BigInteger e, byte[] txt) {
-
         RSAEngine engine = new RSAEngine();
         // RSA Key param, public key modulus, public key exponent
         RSAKeyParameters param = new RSAKeyParameters(false, m, e);
@@ -79,11 +100,10 @@ public class Rsa {
     }
 
     public byte[] decrypt(byte[] m, byte[] e, byte[] txt) {
-
         RSAEngine engine = new RSAEngine();
         // RSA Key param, private key modulus, private key exponent
         RSAKeyParameters param = new RSAKeyParameters(true, new BigInteger(1, m), new BigInteger(1, e));
-        // init for encryption
+        // init for decryption
         engine.init(false, param);
         return engine.processBlock(txt, 0, txt.length);
     }

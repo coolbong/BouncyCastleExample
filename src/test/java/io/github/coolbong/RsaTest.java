@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 
 import static io.github.coolbong.Util.toBytes;
 import static io.github.coolbong.Util.toHex;
@@ -239,5 +240,15 @@ public class RsaTest {
         }
     }
 
+
+    @Test
+    public void test_generate_key_pair() {
+        Rsa rsa = new Rsa();
+        try {
+            rsa.generateRsaKey();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
