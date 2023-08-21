@@ -26,6 +26,7 @@ public class Rsa {
 
 
 
+    // read rsa key  from file
     public RSAPrivateKey readPemPrivateKey(File file) throws IOException{
         FileReader reader = new FileReader(file);
         return readPemPrivateKey(reader);
@@ -62,22 +63,29 @@ public class Rsa {
     }
 
 
-
-    public void generateRsaKey() throws NoSuchAlgorithmException {
+    // rsa key generation
+    public static final BigInteger RSA_KEY_PUBLIC_EXPONENT = BigInteger.valueOf(0x10001);
+    public static final int RSA_KEY_DEFAULT_CERTAINTY = 80;
+    public AsymmetricCipherKeyPair generateRsaKey(int bit) throws NoSuchAlgorithmException {
 
         RSAKeyGenerationParameters pram = new RSAKeyGenerationParameters(
-                new BigInteger("010001", 16),
-                SecureRandom.getInstance("SHA1PRNG"),
-                4096,
-                80
+                RSA_KEY_PUBLIC_EXPONENT,
+                new SecureRandom(),
+                bit,
+                RSA_KEY_DEFAULT_CERTAINTY
         );
 
         RSAKeyPairGenerator generator = new RSAKeyPairGenerator();
         generator.init(pram);
         AsymmetricCipherKeyPair keyPair = generator.generateKeyPair();
-        System.out.println(keyPair);
-        System.out.println(keyPair.getPrivate());
-        System.out.println(keyPair.getPublic());
+
+        //System.out.println(keyPair);
+        //System.out.println(keyPair.getPrivate());
+        //System.out.println(keyPair.getPublic());
+
+        //RSAKeyParameters privateKey = (RSAKeyParameters)keyPair.getPrivate();
+        return keyPair;
+
     }
 
 
@@ -118,6 +126,16 @@ public class Rsa {
         return engine.processBlock(txt, 0, txt.length);
     }
 
+
+    public byte[] decrypt(byte[] p, byte[] q, byte[] dp1, byte[] dq1, byte[] qInv, byte[] txt) {
+        return decrypt(
+                new BigInteger(1, p),
+                new BigInteger(1, q),
+                new BigInteger(1, dp1),
+                new BigInteger(1, dq1),
+                new BigInteger(1, qInv),
+                txt);
+    }
 
     public byte[] decrypt(BigInteger p, BigInteger q, BigInteger dp1, BigInteger dq1, BigInteger qInv, byte[] txt) {
 

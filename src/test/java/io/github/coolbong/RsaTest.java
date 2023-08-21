@@ -2,6 +2,9 @@ package io.github.coolbong;
 
 import org.bouncycastle.asn1.pkcs.RSAPrivateKey;
 import org.bouncycastle.asn1.pkcs.RSAPublicKey;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.params.RSAKeyParameters;
+import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -153,7 +156,7 @@ public class RsaTest {
             //System.out.println(new String(ret, StandardCharsets.UTF_8));
             Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -175,7 +178,7 @@ public class RsaTest {
             byte[] ret = rsa.decrypt(mod, exp, toBytes(encrypted));
             Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -200,7 +203,7 @@ public class RsaTest {
             //System.out.println(new String(ret, StandardCharsets.UTF_8));
             Assert.assertEquals(plaintext, new String(ret, StandardCharsets.UTF_8));
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         }
     }
 
@@ -237,6 +240,7 @@ public class RsaTest {
             Assert.assertEquals(new String(ret1), new String(ret2));
             Assert.assertEquals(plaintext, new String(ret1, StandardCharsets.UTF_8));
         } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -245,7 +249,52 @@ public class RsaTest {
     public void test_generate_key_pair() {
         Rsa rsa = new Rsa();
         try {
-            rsa.generateRsaKey();
+            AsymmetricCipherKeyPair keyPair = rsa.generateRsaKey(1408);
+
+            RSAKeyParameters publicKey = (RSAKeyParameters)keyPair.getPublic();
+            RSAKeyParameters privateKey = (RSAKeyParameters)keyPair.getPrivate();
+            RSAPrivateCrtKeyParameters privateCrtKey = (RSAPrivateCrtKeyParameters)keyPair.getPrivate();
+
+            // public key
+            BigInteger mod = publicKey.getModulus();
+            BigInteger exp = publicKey.getExponent();
+            //System.out.println(mod);
+            //System.out.println(exp);
+
+            // private key
+            BigInteger privMod = privateKey.getModulus();
+            BigInteger privExp = privateKey.getExponent();
+            //System.out.println(privMod);
+            //System.out.println(privExp);
+
+            // private crt key
+            BigInteger p = privateCrtKey.getP();
+            BigInteger q = privateCrtKey.getQ();
+            BigInteger dp = privateCrtKey.getDP();
+            BigInteger dq= privateCrtKey.getDQ();
+            BigInteger qInv = privateCrtKey.getQInv();
+            //System.out.println(p);
+            //System.out.println(q);
+            //System.out.println(dp);
+            //System.out.println(dq);
+            //System.out.println(qInv);
+
+            String hex = "6A05010908001DBA7031931FEBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB9710C0106423A283051DBF561F2ABDFEE20E74B2BC";
+            byte[] ret = rsa.encrypt(mod, exp, toBytes(hex));
+            byte[] txt = rsa.decrypt(p, q, dp, dq, qInv, ret);
+            assertEquals(hex, toHex(txt));
+
+            byte[] bP = p.toByteArray();
+            byte[] bQ = q.toByteArray();
+            byte[] bDp = dp.toByteArray();
+            byte[] bDq = dq.toByteArray();
+            byte[] bQinv = qInv.toByteArray();
+            txt = rsa.decrypt(bP, bQ, bDp, bDq, bQinv, ret);
+            assertEquals(hex, toHex(txt));
+
+            txt = rsa.decrypt(privMod, privExp, ret);
+            assertEquals(hex, toHex(txt));
+
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

@@ -11,12 +11,10 @@ import java.util.List;
 public class Util {
 
     public static String toHex(byte[] arr) {
-
         StringBuilder sb = new StringBuilder();
         for (byte b : arr) {
             sb.append(String.format("%02X", b));
         }
-
         return sb.toString();
     }
 

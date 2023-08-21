@@ -33,6 +33,8 @@ public class PaddingTest {
         Padding padding = new Padding();
         byte[] ret = padding.pkcs7Padding(data, 8);
 
+        System.out.println(toHex(data));
+        System.out.println(toHex(ret));
         Assert.assertArrayEquals(answer, ret);
     }
 
@@ -86,7 +88,6 @@ public class PaddingTest {
         Padding padding = new Padding();
         byte[] ret = padding.x923Padding(data, 8);
 
-        //System.out.println(toHex(ret));
         Assert.assertArrayEquals(answer, ret);
     }
 
