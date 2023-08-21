@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
 import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
+import org.bouncycastle.jce.provider.PEMUtil;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
@@ -44,6 +45,17 @@ public class Rsa {
         return readPemPublicKey(new FileReader(file));
     }
 
+//    public RSAPublicKey readPemPublicKey(Reader reader) {
+//        try {
+//            PemReader pemReader = new PemReader(reader);
+//            PemObject pemObj = pemReader.readPemObject();
+//
+//            return RSAPublicKey.getInstance(pemObj.getContent());
+//        } catch (IOException e) {
+//        }
+//        return null;
+//    }
+
     public RSAPublicKey readPemPublicKey(Reader reader) {
         try {
             PemReader pemReader = new PemReader(reader);
@@ -51,9 +63,11 @@ public class Rsa {
 
             KeyFactory kf = KeyFactory.getInstance("RSA");
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(pemObj.getContent());
-            java.security.interfaces.RSAPublicKey rsaPublicKey = (java.security.interfaces.RSAPublicKey) kf.generatePublic(keySpec);
+            java.security.interfaces.RSAPublicKey rsaPublicKey = (java.security.interfaces.RSAPublicKey)kf.generatePublic(keySpec);
             BigInteger m = rsaPublicKey.getModulus();
             BigInteger e = rsaPublicKey.getPublicExponent();
+
+            pemReader.close();
 
             return new RSAPublicKey(m, e);
             //return RSAPublicKey.getInstance(pemObj.getContent());
@@ -85,9 +99,10 @@ public class Rsa {
 
         //RSAKeyParameters privateKey = (RSAKeyParameters)keyPair.getPrivate();
         return keyPair;
-
     }
 
+
+    // rsa encrypt / decrypt
 
     public byte[] encrypt(byte[] m, byte[] e, byte[] txt) {
         RSAEngine engine = new RSAEngine();
@@ -157,4 +172,11 @@ public class Rsa {
         return engine.processBlock(txt, 0, txt.length);
     }
 
+
+
+    // RSA Certificate generate
+//    public void generateRsaCertificate() {
+//        //org.bouncycastle.cert.X509
+//        //X509v3CertificateBuilder
+//    }
 }
