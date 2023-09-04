@@ -217,7 +217,8 @@ public class Aes {
         }
         // create AES cipher
         BlockCipher engine = new AESEngine();
-        // Padding cipher (adjust input data length to des block size)
+        // Padding cipher (adjust input data length to AES block size)
+        // Segmented Integer Counter (SIC) mode == CTR mode
         BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new SICBlockCipher(engine));
         // set key
         cipher.init(false, new ParametersWithIV(new KeyParameter(key), iv));
@@ -382,7 +383,7 @@ public class Aes {
         Aes aes = new Aes();
         //aes.aesEcbExample();
         //aes.aesCbcExample();
-        aes.aesCtrExample();
+        //aes.aesCtrExample();
         //aes.aesEcbPadExample();
         //aes.aesCbcPadExample();
         //aes.aesCtrPadExample();
