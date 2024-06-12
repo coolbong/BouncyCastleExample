@@ -44,7 +44,7 @@ public class DesTest {
     public void des_ecb_encrypt_with_padding() throws InvalidCipherTextException {
         Des des = new Des();
         byte[] text = "hello world".getBytes(StandardCharsets.UTF_8);
-        byte[] ret = des.desEcbPaddEncrypt(des2key, text);
+        byte[] ret = des.desEcbPadEncrypt(des2key, text);
 
         assertEquals("3C05C505BE37C540CA105B9C2FAD62DC", toHex(ret));
     }
@@ -58,7 +58,7 @@ public class DesTest {
                 (byte)0xca, (byte)0x10, (byte)0x5b, (byte)0x9c,
                 (byte)0x2f, (byte)0xad, (byte)0x62, (byte)0xdc
         };
-        byte[] ret = des.desEcbPaddDecrypt(des2key, text);
+        byte[] ret = des.desEcbPadDecrypt(des2key, text);
 
         //System.out.println(to_bytes_variable(ret));
         //System.out.println(toHex(ret));
@@ -120,7 +120,7 @@ public class DesTest {
     public void des_cbc_encrypt_with_padding() throws InvalidCipherTextException {
         Des des = new Des();
         byte[] text = "hello world".getBytes(StandardCharsets.UTF_8);
-        byte[] ret = des.desCbcPaddEncrypt(des2key, text, null);
+        byte[] ret = des.desCbcPadEncrypt(des2key, text, null);
 
         //System.out.println(to_bytes_variable(ret));
 
@@ -136,7 +136,7 @@ public class DesTest {
                 (byte)0xcf, (byte)0x44, (byte)0xc4, (byte)0x88,
                 (byte)0x87, (byte)0xfe, (byte)0x95, (byte)0x61
         };
-        byte[] ret = des.desCbcPaddDecrypt(des2key, text, null);
+        byte[] ret = des.desCbcPadDecrypt(des2key, text, null);
 
         assertEquals("hello world", new String(ret, StandardCharsets.UTF_8));
     }
