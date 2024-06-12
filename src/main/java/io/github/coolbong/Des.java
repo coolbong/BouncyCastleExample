@@ -49,7 +49,7 @@ public class Des {
         return outBuff;
     }
 
-    public byte[] desEcbPaddEncrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+    public byte[] desEcbPadEncrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
         // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         // Padding cipher (adjust input data length to des block size)
@@ -67,7 +67,7 @@ public class Des {
         return outBuff;
     }
 
-    public byte[] desEcbPaddDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
+    public byte[] desEcbPadDecrypt(byte[] key, byte[] text) throws InvalidCipherTextException {
         // create TDES cipher
         BlockCipher engine = new DESedeEngine();
         // Padding cipher (adjust input data length to des block size)
@@ -122,7 +122,7 @@ public class Des {
         return outBuff;
     }
 
-    public byte[] desCbcPaddEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+    public byte[] desCbcPadEncrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
         // create default initialize vector
         if (iv == null) {
             iv = new byte[8];
@@ -144,7 +144,7 @@ public class Des {
         return outBuff;
     }
 
-    public byte[] desCbcPaddDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
+    public byte[] desCbcPadDecrypt(byte[] key, byte[] text, byte[] iv) throws InvalidCipherTextException {
         // create default initialize vector
         if (iv == null) {
             iv = new byte[8];
@@ -196,19 +196,19 @@ public class Des {
 
 
         text = "hello world".getBytes(StandardCharsets.UTF_8);
-        ret = ex.desEcbPaddEncrypt(key, text);
+        ret = ex.desEcbPadEncrypt(key, text);
         print(ret);
 
-        ret = ex.desEcbPaddDecrypt(key, ret);
+        ret = ex.desEcbPadDecrypt(key, ret);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
 
         text = "hello world".getBytes(StandardCharsets.UTF_8);
-        ret = ex.desCbcPaddEncrypt(key, text, null);
+        ret = ex.desCbcPadEncrypt(key, text, null);
         System.out.println(toHex(ret));
         print(ret);
 
-        ret = ex.desCbcPaddDecrypt(key, ret, null);
+        ret = ex.desCbcPadDecrypt(key, ret, null);
         System.out.println(new String(ret, StandardCharsets.UTF_8));
 
     }
